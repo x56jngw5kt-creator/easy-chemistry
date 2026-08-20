@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Easy Chemistry | Dr/Ahmed Mahmoud</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-mark">⚗</div>
+    <div><h1>Easy Chemistry</h1><small>Dr/Ahmed Mahmoud</small></div>
+  </div>
+  <nav>
+    <a href="#courses">الكورسات</a><a href="#features">مميزاتنا</a><a href="#about">عن المنصة</a>
+    <a class="login" href="login.html">تسجيل الدخول</a>
+  </nav>
+</header>
+
+<main>
+<section class="hero">
+  <div class="hero-content">
+    <span class="eyebrow">منصة الكيمياء بأسلوب أسهل</span>
+    <h2>افهم الكيمياء.<br><strong>اتقنها. وحقق هدفك.</strong></h2>
+    <p>شرح مبسط، محاضرات منظمة، اختبارات إلكترونية ومتابعة مستمرة — كل ما تحتاجه في مكان واحد.</p>
+    <div class="hero-actions"><a class="btn primary" href="#courses">استكشف الكورسات</a><a class="btn ghost" href="login.html">ابدأ الآن</a></div>
+  </div>
+  <div class="molecule">
+    <div class="atom center">C</div><div class="orbit o1"></div><div class="orbit o2"></div>
+    <i class="dot d1"></i><i class="dot d2"></i><i class="dot d3"></i><i class="dot d4"></i>
+  </div>
+</section>
+
+<section id="courses" class="section">
+  <div class="section-head"><div><span class="eyebrow">ابدأ مذاكرتك</span><h2>الكورسات</h2></div><a href="login.html">عرض الكل ←</a></div>
+  <div class="cards">
+    <article class="course"><div class="course-icon">🧪</div><span>الصف الأول الثانوي</span><h3>أساسيات الكيمياء</h3><p>شرح المنهج + تدريبات واختبارات.</p><button onclick="showMsg('سيتم فتح الكورس بعد تسجيل الدخول')">ابدأ الكورس</button></article>
+    <article class="course"><div class="course-icon">⚛️</div><span>الصف الثاني الثانوي</span><h3>كيمياء 2 ثانوي</h3><p>محاضرات مرتبة ومراجعات شاملة.</p><button onclick="showMsg('سيتم فتح الكورس بعد تسجيل الدخول')">ابدأ الكورس</button></article>
+    <article class="course"><div class="course-icon">🔬</div><span>الصف الثالث الثانوي</span><h3>كيمياء 3 ثانوي</h3><p>شرح + حل أسئلة + امتحانات تجريبية.</p><button onclick="showMsg('سيتم فتح الكورس بعد تسجيل الدخول')">ابدأ الكورس</button></article>
+  </div>
+</section>
+
+<section id="features" class="section features">
+  <div class="section-head"><div><span class="eyebrow">كل اللي تحتاجه</span><h2>ذاكر بطريقة أذكى</h2></div></div>
+  <div class="feature-grid">
+    <div><b>🎥 محاضرات فيديو</b><p>المحاضرات مرتبة داخل كل كورس.</p></div>
+    <div><b>📝 اختبارات إلكترونية</b><p>اختبر نفسك وتابع مستواك.</p></div>
+    <div><b>📄 ملفات ومذكرات</b><p>ملفات PDF ومراجعات في مكان واحد.</p></div>
+    <div><b>📊 متابعة التقدم</b><p>اعرف أنجزت قد إيه من الكورس.</p></div>
+    <div><b>🏆 نقاط وإنجازات</b><p>نظام تحفيزي لتشجيع الاستمرار.</p></div>
+    <div><b>👨‍👩‍👦 متابعة ولي الأمر</b><p>إمكانية متابعة نشاط الطالب لاحقًا.</p></div>
+  </div>
+</section>
+
+<section id="about" class="about"><div><span class="eyebrow">Easy Chemistry</span><h2>الكيمياء أبسط مما تتخيل.</h2><p>منصة تعليمية مخصصة لطلاب الكيمياء، بتجربة سهلة وسريعة على الموبايل والكمبيوتر.</p></div><div class="stats"><b>24/7</b><span>ذاكر في أي وقت</span></div></section>
+</main>
+
+<footer><div><b>Easy Chemistry</b><small>Dr/Ahmed Mahmoud</small></div><span>© 2026 Easy Chemistry. جميع الحقوق محفوظة.</span></footer>
+<div id="toast"></div>
+<script>
+function showMsg(t){const x=document.getElementById('toast');x.textContent=t;x.classList.add('show');setTimeout(()=>x.classList.remove('show'),2500)}
+</script>
+</body></html>
