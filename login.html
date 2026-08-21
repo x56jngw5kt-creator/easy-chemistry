@@ -1,8 +1,16 @@
 <!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>تسجيل الدخول | Easy Chemistry</title><link rel="stylesheet" href="styles.css"></head><body>
 <div style="min-height:100vh;display:grid;place-items:center;background:#fff5f5;padding:20px"><div style="width:min(440px,100%);background:#fff;padding:35px;border-radius:22px;box-shadow:0 20px 60px #0001">
-<div style="text-align:center"><div class="brand-mark" style="margin:auto">⚗</div><h1>Easy Chemistry</h1><small>Dr/Ahmed Mahmoud</small><h2>أهلاً بيك 👋</h2><p style="color:#777">سجّل دخولك لمتابعة كورساتك.</p></div>
-<label>رقم الهاتف أو البريد</label><input style="width:100%;padding:13px;margin:8px 0 15px;border:1px solid #ddd;border-radius:10px;font:inherit">
-<label>كلمة السر</label><input type="password" style="width:100%;padding:13px;margin:8px 0 20px;border:1px solid #ddd;border-radius:10px;font:inherit">
-<button onclick="alert('هذه نسخة تجريبية. سيتم ربط تسجيل الدخول بقاعدة بيانات في مرحلة النشر.')" style="width:100%;padding:13px;background:#d71920;color:#fff;border:0;border-radius:10px;font:inherit;font-weight:800">تسجيل الدخول</button>
+<div style="text-align:center"><div class="brand-mark" style="margin:auto">⚗</div><h1>Easy Chemistry</h1><small>Dr/Ahmed Mahmoud</small><h2>تسجيل الدخول</h2><p style="color:#777">ادخل بحسابك للمتابعة.</p></div>
+<div id="error" style="display:none;background:#fff0f0;color:#b00000;padding:10px;border-radius:9px;margin-bottom:14px"></div>
+<label>البريد الإلكتروني</label><input id="email" type="email" autocomplete="email" style="width:100%;padding:13px;margin:8px 0 15px;border:1px solid #ddd;border-radius:10px;font:inherit">
+<label>كلمة المرور</label><input id="password" type="password" autocomplete="current-password" style="width:100%;padding:13px;margin:8px 0 20px;border:1px solid #ddd;border-radius:10px;font:inherit">
+<button id="login" style="width:100%;padding:13px;background:#d71920;color:#fff;border:0;border-radius:10px;font:inherit;font-weight:800;cursor:pointer">تسجيل الدخول</button>
 <p style="text-align:center;margin-top:20px"><a href="index.html" style="color:#d71920">← العودة للرئيسية</a></p>
-</div></div></body></html>
+</div></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script>
+<script>
+const client = supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+const errorBox=document.getElementById('error');
+function showError(t){errorBox.textContent=t;errorBox.style.display='block'}
+document.getElementById('login').onclick=async()=>{errorBox.style.display='none';const email=document.getElementById('email').value.trim(),password=document.getElementById('password').value;if(!email||!password)return showError('اكتب البريد الإلكتروني وكلمة المرور.');const btn=document.getElementById('login');btn.disabled=true;btn.textContent='جاري الدخول...';const {data,error}=await client.auth.signInWithPassword({email,password});if(error){showError(error.message.includes('Invalid login')?'البريد الإلكتروني أو كلمة المرور غير صحيحة.':error.message);btn.disabled=false;btn.textContent='تسجيل الدخول';return}window.location.href='admin.html'};
+</script></body></html>

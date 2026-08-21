@@ -1,13 +1,11 @@
 <!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin | Easy Chemistry</title><link rel="stylesheet" href="styles.css"></head><body>
-<header class="topbar"><div class="brand"><div class="brand-mark">⚗</div><div><h1>Easy Chemistry</h1><small>Admin Dashboard</small></div></div><a class="login" href="index.html">عرض المنصة</a></header>
+<header class="topbar"><div class="brand"><div class="brand-mark">⚗</div><div><h1>Easy Chemistry</h1><small>Admin Dashboard</small></div></div><div style="display:flex;gap:10px;align-items:center"><span id="userEmail" style="font-size:12px;color:#777"></span><button id="logout" class="login" style="border:0;cursor:pointer;font:inherit">تسجيل الخروج</button></div></header>
 <main class="section"><div class="section-head"><div><span class="eyebrow">لوحة الإدارة</span><h2>مرحبًا يا دكتور أحمد 👋</h2></div></div>
-<div class="feature-grid">
-<div><b>📚 الكورسات</b><p>إضافة وتعديل وحذف الكورسات.</p><button class="course button" onclick="alert('سيتم تفعيل إدارة الكورسات مع قاعدة البيانات.')">إدارة الكورسات</button></div>
-<div><b>🎥 المحاضرات</b><p>رفع روابط الفيديو وترتيب المحاضرات.</p><button class="course button" onclick="alert('سيتم تفعيل رفع المحاضرات مع التخزين.')">إضافة محاضرة</button></div>
-<div><b>📝 الاختبارات</b><p>إنشاء أسئلة واختبارات ودرجات.</p><button class="course button" onclick="alert('سيتم تفعيل الاختبارات في النسخة الكاملة.')">إنشاء اختبار</button></div>
-<div><b>👨‍🎓 الطلاب</b><p>عرض الطلاب ومتابعة تقدمهم.</p><button class="course button" onclick="alert('سيتم تفعيل إدارة الطلاب مع تسجيل الدخول.')">إدارة الطلاب</button></div>
-<div><b>📄 الملفات</b><p>إضافة المذكرات والـPDF.</p><button class="course button" onclick="alert('سيتم تفعيل التخزين الآمن للملفات.')">رفع ملف</button></div>
-<div><b>📊 الإحصائيات</b><p>مشاهدات المحاضرات ونسب الإنجاز.</p><button class="course button" onclick="alert('ستظهر الإحصائيات بعد ربط قاعدة البيانات.')">عرض الإحصائيات</button></div>
-</div>
-<div class="about" style="margin-top:45px"><div><span class="eyebrow">ملاحظة</span><h2>هذه نسخة الواجهة الأولى.</h2><p>قبل إعطاء رابط للطلاب، نحتاج نشر المشروع وربطه بقاعدة بيانات وتسجيل دخول حقيقي وتخزين للفيديوهات والملفات. لا تستخدم هذه الصفحة كلوحة إدارة حقيقية قبل تفعيل المصادقة.</p></div></div>
-</main></body></html>
+<div class="feature-grid"><div><b>📚 الكورسات</b><p>إضافة وتعديل وحذف الكورسات.</p></div><div><b>🎥 المحاضرات</b><p>رفع روابط الفيديو وترتيب المحاضرات.</p></div><div><b>📝 الاختبارات</b><p>إنشاء أسئلة واختبارات ودرجات.</p></div><div><b>👨‍🎓 الطلاب</b><p>عرض الطلاب ومتابعة تقدمهم.</p></div><div><b>📄 الملفات</b><p>إضافة المذكرات والـPDF.</p></div><div><b>📊 الإحصائيات</b><p>مشاهدات المحاضرات ونسب الإنجاز.</p></div></div>
+<div class="about" style="margin-top:45px"><div><span class="eyebrow">تم الربط</span><h2>تسجيل الدخول أصبح حقيقيًا.</h2><p>هذه المرحلة تربط لوحة الإدارة بـSupabase Auth. الخطوة التالية هي إنشاء جداول الكورسات والمحاضرات والطلاب، ثم إضافة صلاحيات Admin ورفع الملفات.</p></div></div></main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script>
+<script>
+const client=supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+(async()=>{const {data:{session}}=await client.auth.getSession();if(!session){location.href='login.html';return}document.getElementById('userEmail').textContent=session.user.email})();
+document.getElementById('logout').onclick=async()=>{await client.auth.signOut();location.href='login.html'};
+</script></body></html>
