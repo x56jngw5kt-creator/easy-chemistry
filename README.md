@@ -1,14 +1,5 @@
-# Easy Chemistry — Dr/Ahmed Mahmoud
+# Easy Chemistry v3
 
-نسخة أولى مرتبطة بـSupabase Auth لتسجيل دخول الـAdmin.
+نسخة مرتبطة بـSupabase: تسجيل دخول Admin + إدارة الكورسات والمحاضرات + عرض الكورسات المنشورة.
 
-## إعداد Admin
-1. في Supabase افتح Authentication → Users.
-2. أنشئ مستخدمًا جديدًا ببريد إلكتروني وكلمة مرور قوية.
-3. استخدم نفس البيانات في `login.html`.
-
-## مهم
-المفتاح الموجود في `supabase-config.js` هو Publishable key ومصمم للاستخدام في تطبيقات الواجهة. لا تضع Secret/Service Role key في ملفات الموقع.
-
-## المرحلة التالية
-إضافة جداول الكورسات والمحاضرات والطلاب، تفعيل Row Level Security، ثم ربط لوحة الإدارة بإضافة/تعديل المحتوى وSupabase Storage للملفات.
+ارفع الملفات إلى Repository نفسه واستبدل الملفات القديمة. لا ترفع أي Secret/Service Role key.

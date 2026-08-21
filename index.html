@@ -61,4 +61,8 @@
 <script>
 function showMsg(t){const x=document.getElementById('toast');x.textContent=t;x.classList.add('show');setTimeout(()=>x.classList.remove('show'),2500)}
 </script>
-</body></html>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script>
+<script>
+const publicClient=supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+(async()=>{const r=await publicClient.from('courses').select('*').eq('published',true).order('created_at',{ascending:false});if(!r.error&&r.data?.length){const box=document.querySelector('.cards');box.innerHTML=r.data.map(c=>`<article class="course"><div class="course-icon">🧪</div><span>${escPub(c.grade||'كيمياء')}</span><h3>${escPub(c.title)}</h3><p>${escPub(c.description||'')}</p><a class="btn primary" style="display:block;text-align:center" href="login.html">دخول للكورس</a></article>`).join('')}})();function escPub(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}</script></body></html>
