@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>منصة الطالب | Easy Chemistry</title><link rel="stylesheet" href="styles.css">
+<style>
+.dashboard{padding:45px 7%}.student-hero{background:#fff5f5;border-radius:24px;padding:30px;margin-bottom:30px}.student-hero h2{margin:5px 0}.course-list{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.course-card{border:1px solid #eee;border-radius:17px;padding:22px;background:#fff}.course-card h3{margin:8px 0}.course-card p{color:#777;font-size:13px}.redbtn{background:#d71920;color:white;border:0;border-radius:10px;padding:11px 16px;font:inherit;font-weight:700;cursor:pointer}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px}@media(max-width:800px){.course-list{grid-template-columns:1fr}}
+</style></head>
+<body>
+<header class="topbar"><div class="brand"><div class="brand-mark">⚗</div><div><h1>Easy Chemistry</h1><small>Dr/Ahmed Mahmoud</small></div></div><button class="login" onclick="logout()" style="border:0;font:inherit;cursor:pointer">تسجيل الخروج</button></header>
+<main class="dashboard"><div class="student-hero"><span class="eyebrow">منصة الطالب</span><h2>أهلاً بيك، <span id="name">طالب</span> 👋</h2><p style="color:#777">اختار الكورس وابدأ مذاكرتك.</p></div>
+<div class="top"><h2>الكورسات المتاحة</h2></div><div id="courses" class="course-list"><p>جاري تحميل الكورسات...</p></div></main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const db=window.supabase.createClient('https://fudrxnkwscaqvcvgeqog.supabase.co','sb_publishable_SYOH8W6UlAxEG_3p0q5_xQ_wBXXLGuf');
+async function init(){
+ const {data:{user}}=await db.auth.getUser(); if(!user){location.href='login.html';return}
+ const {data:p}=await db.from('profiles').select('full_name,role').eq('id',user.id).single();
+ if(!p||p.role!=='student'){location.href='login.html';return}
+ document.getElementById('name').textContent=p.full_name||'طالب';
+ const {data,error}=await db.from('courses').select('*').eq('published',true).order('created_at',{ascending:false});
+ const box=document.getElementById('courses'); if(error){box.innerHTML='<p>تعذر تحميل الكورسات.</p>';return}
+ box.innerHTML=data.length?data.map(c=>`<article class="course-card"><span class="eyebrow">${c.grade||'كيمياء'}</span><h3>${esc(c.title)}</h3><p>${esc(c.description||'')}</p><button class="redbtn" onclick="openCourse(${c.id})">دخول الكورس</button></article>`).join(''):'<p>لا توجد كورسات منشورة حاليًا.</p>';
+}
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function openCourse(id){alert('صفحة محتوى الكورس ستكون الخطوة التالية.')}
+async function logout(){await db.auth.signOut();location.href='login.html'}
+init();
+</script></body></html>
