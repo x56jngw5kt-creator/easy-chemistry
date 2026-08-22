@@ -13,6 +13,7 @@
 </main>
 <script>
 const db=supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);let user,profile;
+  const $=id=>document.getElementById(id);
 function esc(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
 async function init(){const {data:{user:u}}=await db.auth.getUser();if(!u){location.href='login.html';return}user=u;const p=await db.from('profiles').select('*').eq('id',u.id).single();if(p.error||p.data?.role!=='student'){location.href='login.html';return}profile=p.data;$('name').textContent=profile.full_name||'طالب';$('myGrade').value=profile.grade||'الصف الرابع الابتدائي';$('accountInfo').innerHTML=`<p><b>الاسم:</b> ${esc(profile.full_name)}</p><p><b>رقم الطالب:</b> ${esc(profile.phone)}</p><p><b>ولي الأمر:</b> ${esc(profile.guardian_phone)}</p>`;loadCourses();loadMistakes()}
 async function loadCourses(){const r=await db.from('courses').select('*').eq('published',true).order('created_at',{ascending:false});$('courseGrid').innerHTML=r.data?.length?r.data.map(c=>`<article class="card"><span class="eyebrow">${esc(c.grade||'كيمياء')}</span><h3>${esc(c.title)}</h3><p>${esc(c.description)}</p><button class="redbtn" onclick="openCourse(${c.id})">دخول الكورس</button></article>`).join(''):'<p>لا توجد كورسات منشورة.</p>'}
