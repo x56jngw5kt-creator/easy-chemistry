@@ -1,50 +1,1216 @@
-<!doctype html>
-<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>الدخول | Easy Chemistry</title><link rel="stylesheet" href="styles.css"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script>
-<style>
-.auth-wrap{min-height:100vh;display:grid;place-items:center;background:linear-gradient(135deg,#fff,#fff1f1);padding:20px}.auth-card{width:min(560px,100%);background:#fff;padding:30px;border-radius:24px;box-shadow:0 20px 70px #0001}.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0}.role{padding:17px;border:1px solid #ddd;background:#fff;border-radius:13px;font:inherit;cursor:pointer}.role.active{border:2px solid var(--red);background:#fff5f5}.field{margin:10px 0}.field label{display:block;font-weight:700;font-size:13px;margin-bottom:5px}.field input,.field select{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;font:inherit}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.auth-btn{width:100%;padding:13px;border:0;border-radius:11px;background:var(--red);color:#fff;font:inherit;font-weight:800;cursor:pointer;margin-top:10px}.msg{display:none;margin-top:12px;padding:10px;border-radius:9px;font-size:13px}.msg.show{display:block}.err{background:#fff0f0;color:#a00000}.ok{background:#eefbf1;color:#176b2a}@media(max-width:600px){.form-grid{grid-template-columns:1fr}}
-</style></head><body>
-<div class="auth-wrap"><div class="auth-card">
-<div style="text-align:center"><div class="brand-mark" style="margin:auto">⚗</div><h1 style="margin:8px 0">Easy Chemistry</h1><small>Dr/Ahmed Mahmoud</small></div>
-<div class="tabs" style="display:grid;grid-template-columns:1fr 1fr;background:#f7f7f7;padding:4px;border-radius:12px;margin-top:20px"><button id="tLogin" class="role active" onclick="mode('login')">تسجيل الدخول</button><button id="tSignup" class="role" onclick="mode('signup')">إنشاء حساب</button></div>
-<div id="loginBox"><h2>تسجيل الدخول</h2><p style="color:#777">اختار نوع الحساب.</p>
-<div class="role-grid"><button id="studentRole" class="role active" onclick="setRole('student')">🎓<b>طالب</b><br><small>منصة الطالب</small></button><button id="adminRole" class="role" onclick="setRole('admin')">👨‍🏫<b>Admin</b><br><small>لوحة الإدارة</small></button></div>
-<div class="field"><label>البريد الإلكتروني</label><input id="le" type="email"></div><div class="field"><label>كلمة المرور</label><input id="lp" type="password"></div><button class="auth-btn" onclick="login()">دخول</button></div>
-<div id="signupBox" style="display:none"><h2>إنشاء حساب طالب</h2><div class="form-grid">
-<div class="field"><label>اسم الطالب</label><input id="name"></div><div class="field"><label>رقم الطالب</label><input id="phone" inputmode="numeric" placeholder="010xxxxxxxx"></div>
-<div class="field"><label>رقم ولي الأمر</label><input id="guardian" inputmode="numeric" placeholder="011xxxxxxxx"></div>
-<div class="field"><label>الصف</label><select id="grade"><option value="">اختر الصف</option><option>الصف الرابع الابتدائي</option><option>الصف الخامس الابتدائي</option><option>الصف السادس الابتدائي</option><option>الصف الاول الإعدادي</option><option>الصف الثاني الإعدادي</option><option>الصف الثالث الإعدادي</option><option>الصف الاول الثانوي</option><option>الصف الثاني الثانوي عام</option><option>الصف الثاني الثانوي بكالوريا</option><option>الصف الثالث الثانوي</option></select></div>
-<div class="field"><label>البريد الإلكتروني</label><input id="se" type="email"></div><div class="field"><label>كلمة المرور</label><input id="sp" type="password"></div>
-</div><button class="auth-btn" onclick="signup()">إنشاء حساب الطالب</button><p style="font-size:11px;color:#888">لا يتم إنشاء حسابات Admin من التسجيل العام.</p></div>
-<div id="msg" class="msg"></div><p style="text-align:center"><a href="index.html" style="color:var(--red)">← الرئيسية</a></p>
-</div></div>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Easy Chemistry | تسجيل الدخول</title>
+
+  <link rel="stylesheet" href="styles.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Tahoma, sans-serif;
+      background: linear-gradient(135deg, #ffffff, #fff1f1);
+      color: #222;
+    }
+
+    .auth-wrap {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 25px;
+    }
+
+    .auth-card {
+      width: 100%;
+      max-width: 560px;
+      background: #fff;
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: 0 20px 70px rgba(0,0,0,.10);
+    }
+
+    .logo-area {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .logo-icon {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: #d71920;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: auto;
+      font-size: 30px;
+    }
+
+    .logo-area h1 {
+      margin: 12px 0 4px;
+      font-size: 25px;
+    }
+
+    .logo-area small {
+      color: #777;
+    }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5px;
+      background: #f5f5f5;
+      padding: 5px;
+      border-radius: 13px;
+      margin-bottom: 25px;
+    }
+
+    .tab {
+      border: 0;
+      padding: 12px;
+      border-radius: 10px;
+      background: transparent;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: bold;
+    }
+
+    .tab.active {
+      background: white;
+      color: #d71920;
+      box-shadow: 0 2px 8px rgba(0,0,0,.08);
+    }
+
+    .role-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .role {
+      border: 2px solid #ddd;
+      background: white;
+      border-radius: 15px;
+      padding: 18px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    .role.active {
+      border-color: #d71920;
+      background: #fff5f5;
+    }
+
+    .role-icon {
+      font-size: 25px;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .field {
+      margin-bottom: 14px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font-size: 15px;
+      font-family: inherit;
+      outline: none;
+    }
+
+    .field input:focus,
+    .field select:focus {
+      border-color: #d71920;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .main-btn {
+      width: 100%;
+      padding: 14px;
+      border: 0;
+      border-radius: 11px;
+      background: #d71920;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+
+    .main-btn:hover {
+      background: #b9141a;
+    }
+
+    .main-btn:disabled {
+      opacity: .65;
+      cursor: not-allowed;
+    }
+
+    .message {
+      display: none;
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 14px;
+      line-height: 1.7;
+      word-break: break-word;
+    }
+
+    .message.show {
+      display: block;
+    }
+
+    .message.error {
+      background: #fff0f0;
+      color: #a00000;
+      border: 1px solid #ffd0d0;
+    }
+
+    .message.success {
+      background: #effbf1;
+      color: #176b2a;
+      border: 1px solid #ccefd2;
+    }
+
+    .back {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: #d71920;
+      text-decoration: none;
+    }
+
+    .hint {
+      color: #777;
+      font-size: 12px;
+      line-height: 1.7;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 600px) {
+      .auth-card {
+        padding: 22px;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="auth-wrap">
+
+  <div class="auth-card">
+
+    <div class="logo-area">
+      <div class="logo-icon">⚗</div>
+      <h1>Easy Chemistry</h1>
+      <small>Dr/Ahmed Mahmoud</small>
+    </div>
+
+    <!-- Tabs -->
+
+    <div class="tabs">
+      <button
+        id="loginTab"
+        class="tab active"
+        type="button"
+        onclick="showLogin()">
+        تسجيل الدخول
+      </button>
+
+      <button
+        id="signupTab"
+        class="tab"
+        type="button"
+        onclick="showSignup()">
+        إنشاء حساب
+      </button>
+    </div>
+
+
+    <!-- LOGIN -->
+
+    <section id="loginSection">
+
+      <h2>تسجيل الدخول</h2>
+
+      <p style="color:#777;">
+        اختر نوع الحساب ثم أدخل بيانات الدخول.
+      </p>
+
+      <div class="role-grid">
+
+        <button
+          id="studentRole"
+          class="role active"
+          type="button"
+          onclick="selectRole('student')">
+
+          <span class="role-icon">🎓</span>
+
+          <strong>طالب</strong>
+
+          <br>
+
+          <small>منصة الطالب</small>
+
+        </button>
+
+
+        <button
+          id="adminRole"
+          class="role"
+          type="button"
+          onclick="selectRole('admin')">
+
+          <span class="role-icon">👨‍🏫</span>
+
+          <strong>Admin</strong>
+
+          <br>
+
+          <small>لوحة الإدارة</small>
+
+        </button>
+
+      </div>
+
+
+      <div class="field">
+
+        <label for="loginEmail">
+          البريد الإلكتروني
+        </label>
+
+        <input
+          id="loginEmail"
+          type="email"
+          autocomplete="email"
+          placeholder="example@email.com">
+
+      </div>
+
+
+      <div class="field">
+
+        <label for="loginPassword">
+          كلمة المرور
+        </label>
+
+        <input
+          id="loginPassword"
+          type="password"
+          autocomplete="current-password"
+          placeholder="كلمة المرور">
+
+      </div>
+
+
+      <button
+        id="loginButton"
+        class="main-btn"
+        type="button"
+        onclick="loginUser()">
+
+        تسجيل الدخول
+
+      </button>
+
+    </section>
+
+
+    <!-- SIGN UP -->
+
+    <section id="signupSection" style="display:none;">
+
+      <h2>إنشاء حساب طالب 🎓</h2>
+
+      <p style="color:#777;">
+        أدخل بيانات الطالب لإنشاء حساب جديد.
+      </p>
+
+
+      <div class="form-grid">
+
+        <div class="field">
+
+          <label for="studentName">
+            اسم الطالب
+          </label>
+
+          <input
+            id="studentName"
+            type="text"
+            placeholder="اسم الطالب">
+
+        </div>
+
+
+        <div class="field">
+
+          <label for="studentPhone">
+            رقم الطالب
+          </label>
+
+          <input
+            id="studentPhone"
+            type="tel"
+            inputmode="numeric"
+            maxlength="11"
+            placeholder="010xxxxxxxx">
+
+          <div class="hint">
+            يجب أن يبدأ الرقم بـ 010 أو 011 أو 012 أو 015.
+          </div>
+
+        </div>
+
+
+        <div class="field">
+
+          <label for="guardianPhone">
+            رقم ولي الأمر
+          </label>
+
+          <input
+            id="guardianPhone"
+            type="tel"
+            inputmode="numeric"
+            maxlength="11"
+            placeholder="011xxxxxxxx">
+
+        </div>
+
+
+        <div class="field">
+
+          <label for="studentGrade">
+            الصف الدراسي
+          </label>
+
+          <select id="studentGrade">
+
+            <option value="">
+              اختر الصف
+            </option>
+
+            <option value="الصف الرابع الابتدائي">
+              الصف الرابع الابتدائي
+            </option>
+
+            <option value="الصف الخامس الابتدائي">
+              الصف الخامس الابتدائي
+            </option>
+
+            <option value="الصف السادس الابتدائي">
+              الصف السادس الابتدائي
+            </option>
+
+            <option value="الصف الاول الإعدادي">
+              الصف الاول الإعدادي
+            </option>
+
+            <option value="الصف الثاني الإعدادي">
+              الصف الثاني الإعدادي
+            </option>
+
+            <option value="الصف الثالث الإعدادي">
+              الصف الثالث الإعدادي
+            </option>
+
+            <option value="الصف الاول الثانوي">
+              الصف الاول الثانوي
+            </option>
+
+            <option value="الصف الثاني الثانوي عام">
+              الصف الثاني الثانوي عام
+            </option>
+
+            <option value="الصف الثاني الثانوي بكالوريا">
+              الصف الثاني الثانوي بكالوريا
+            </option>
+
+            <option value="الصف الثالث الثانوي">
+              الصف الثالث الثانوي
+            </option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+
+      <div class="field">
+
+        <label for="signupEmail">
+          البريد الإلكتروني
+        </label>
+
+        <input
+          id="signupEmail"
+          type="email"
+          autocomplete="email"
+          placeholder="example@email.com">
+
+      </div>
+
+
+      <div class="field">
+
+        <label for="signupPassword">
+          كلمة المرور
+        </label>
+
+        <input
+          id="signupPassword"
+          type="password"
+          autocomplete="new-password"
+          placeholder="6 أحرف على الأقل">
+
+      </div>
+
+
+      <button
+        id="signupButton"
+        class="main-btn"
+        type="button"
+        onclick="createStudentAccount()">
+
+        إنشاء حساب الطالب
+
+      </button>
+
+      <div class="hint">
+        الحسابات الجديدة تكون حسابات طلاب فقط.
+        إنشاء حساب Admin يتم من إدارة المنصة.
+      </div>
+
+    </section>
+
+
+    <!-- MESSAGE -->
+
+    <div
+      id="message"
+      class="message">
+    </div>
+
+
+    <a
+      href="index.html"
+      class="back">
+
+      ← العودة إلى الرئيسية
+
+    </a>
+
+  </div>
+
+</div>
+
+
 <script>
-const db=supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);let role='student';
-function mode(m){loginBox.style.display=m==='login'?'block':'none';signupBox.style.display=m==='signup'?'block':'none';tLogin.classList.toggle('active',m==='login');tSignup.classList.toggle('active',m==='signup');clearMsg()}
-function setRole(r){role=r;studentRole.classList.toggle('active',r==='student');adminRole.classList.toggle('active',r==='admin')}
-function show(t,ok=false){msg.textContent=t;msg.className='msg show '+(ok?'ok':'err')}
-function clearMsg(){msg.className='msg'}
-function validEG(v){return /^(010|011|012|015)\d{8}$/.test(v)}
-async function login(){
- clearMsg();const email=le.value.trim(),pass=lp.value;
- if(!email||!pass)return show('اكتب البريد وكلمة المرور.');
- const {data,error}=await db.auth.signInWithPassword({email,password:pass});if(error)return show(error.message);
- const {data:p}=await db.from('profiles').select('role').eq('id',data.user.id).single();
- if(!p){await db.auth.signOut();return show('ملف المستخدم غير موجود.')}
- if(p.role!==role){await db.auth.signOut();return show(role==='admin'?'هذا الحساب ليس Admin.':'هذا الحساب ليس حساب طالب.')}
- location.href=role==='admin'?'admin.html':'student.html';
-}
-async function signup(){
- clearMsg();const n=name.value.trim(),ph=phone.value.trim(),gp=guardian.value.trim(),g=grade.value,e=se.value.trim(),p=sp.value;
- if(!n||!ph||!gp||!g||!e||!p)return show('أكمل جميع البيانات.');
- if(!validEG(ph)||!validEG(gp))return show('رقم الطالب وولي الأمر يجب أن يبدأ بـ 010 أو 011 أو 012 أو 015 ويكون 11 رقمًا.');
- if(p.length<6)return show('كلمة المرور 6 أحرف على الأقل.');
- const {data,error}=await db.auth.signUp({email:e,password:p,options:{data:{full_name:n}}});
- if(error)return show(error.message);
- if(!data.user)return show('تعذر إنشاء الحساب.');
- const {error:pe}=await db.from('profiles').insert({id:data.user.id,full_name:n,role:'student',phone:ph,guardian_phone:gp,grade:g});
- if(pe)return show('تم إنشاء الحساب لكن تعذر حفظ بيانات الطالب: '+pe.message);
- if(!data.session)return show('الحساب اتعمل، لكن Supabase ما زال يطلب تأكيد البريد. عطّل Confirm email من Authentication > Providers > Email ثم جرّب مرة أخرى.',false);
- show('تم إنشاء الحساب بنجاح. يمكنك تسجيل الدخول الآن.',true);mode('login');
-}
-</script></body></html>
+
+  /*
+   * Easy Chemistry Authentication
+   */
+
+  let selectedRole = "student";
+
+  let supabaseClient = null;
+
+
+  // ==============================
+  // INITIALIZE SUPABASE
+  // ==============================
+
+  function initializeSupabase() {
+
+    try {
+
+      if (
+        typeof window.supabase === "undefined"
+      ) {
+
+        throw new Error(
+          "لم يتم تحميل مكتبة Supabase."
+        );
+
+      }
+
+
+      if (
+        typeof SUPABASE_URL === "undefined" ||
+        typeof SUPABASE_PUBLISHABLE_KEY === "undefined"
+      ) {
+
+        throw new Error(
+          "بيانات Supabase غير موجودة في supabase-config.js"
+        );
+
+      }
+
+
+      supabaseClient =
+        window.supabase.createClient(
+          SUPABASE_URL,
+          SUPABASE_PUBLISHABLE_KEY
+        );
+
+
+    } catch (error) {
+
+      showMessage(
+        "خطأ في الاتصال بالمنصة: " +
+        error.message,
+        false
+      );
+
+    }
+
+  }
+
+
+  // ==============================
+  // UI
+  // ==============================
+
+  function showLogin() {
+
+    document
+      .getElementById("loginSection")
+      .style.display = "block";
+
+    document
+      .getElementById("signupSection")
+      .style.display = "none";
+
+
+    document
+      .getElementById("loginTab")
+      .classList.add("active");
+
+    document
+      .getElementById("signupTab")
+      .classList.remove("active");
+
+
+    clearMessage();
+
+  }
+
+
+  function showSignup() {
+
+    document
+      .getElementById("loginSection")
+      .style.display = "none";
+
+    document
+      .getElementById("signupSection")
+      .style.display = "block";
+
+
+    document
+      .getElementById("loginTab")
+      .classList.remove("active");
+
+    document
+      .getElementById("signupTab")
+      .classList.add("active");
+
+
+    clearMessage();
+
+  }
+
+
+  function selectRole(role) {
+
+    selectedRole = role;
+
+
+    document
+      .getElementById("studentRole")
+      .classList.toggle(
+        "active",
+        role === "student"
+      );
+
+
+    document
+      .getElementById("adminRole")
+      .classList.toggle(
+        "active",
+        role === "admin"
+      );
+
+  }
+
+
+  // ==============================
+  // MESSAGES
+  // ==============================
+
+  function showMessage(text, success) {
+
+    const box =
+      document.getElementById("message");
+
+    box.textContent = text;
+
+    box.className =
+      "message show " +
+      (success ? "success" : "error");
+
+  }
+
+
+  function clearMessage() {
+
+    const box =
+      document.getElementById("message");
+
+    box.className = "message";
+
+    box.textContent = "";
+
+  }
+
+
+  // ==============================
+  // EGYPTIAN PHONE VALIDATION
+  // ==============================
+
+  function validEgyptianPhone(phone) {
+
+    return /^(010|011|012|015)[0-9]{8}$/.test(
+      phone
+    );
+
+  }
+
+
+  // ==============================
+  // LOGIN
+  // ==============================
+
+  async function loginUser() {
+
+    clearMessage();
+
+
+    if (!supabaseClient) {
+
+      showMessage(
+        "الاتصال بقاعدة البيانات غير جاهز. أعد تحميل الصفحة.",
+        false
+      );
+
+      return;
+
+    }
+
+
+    const email =
+      document
+        .getElementById("loginEmail")
+        .value
+        .trim();
+
+
+    const password =
+      document
+        .getElementById("loginPassword")
+        .value;
+
+
+    if (!email || !password) {
+
+      showMessage(
+        "من فضلك أدخل البريد الإلكتروني وكلمة المرور.",
+        false
+      );
+
+      return;
+
+    }
+
+
+    const button =
+      document.getElementById("loginButton");
+
+
+    button.disabled = true;
+
+    button.textContent =
+      "جارٍ تسجيل الدخول...";
+
+
+    try {
+
+      const result =
+        await supabaseClient.auth.signInWithPassword({
+
+          email: email,
+
+          password: password
+
+        });
+
+
+      if (result.error) {
+
+        throw result.error;
+
+      }
+
+
+      const user =
+        result.data.user;
+
+
+      if (!user) {
+
+        throw new Error(
+          "لم يتم العثور على المستخدم."
+        );
+
+      }
+
+
+      const profileResult =
+        await supabaseClient
+          .from("profiles")
+          .select("role")
+          .eq("id", user.id)
+          .maybeSingle();
+
+
+      if (profileResult.error) {
+
+        throw profileResult.error;
+
+      }
+
+
+      if (!profileResult.data) {
+
+        await supabaseClient.auth.signOut();
+
+        throw new Error(
+          "حسابك موجود، لكن لا يوجد ملف مستخدم في قاعدة البيانات."
+        );
+
+      }
+
+
+      const realRole =
+        profileResult.data.role;
+
+
+      if (realRole !== selectedRole) {
+
+        await supabaseClient.auth.signOut();
+
+        throw new Error(
+          selectedRole === "admin"
+            ? "هذا الحساب ليس حساب Admin."
+            : "هذا الحساب ليس حساب طالب."
+        );
+
+      }
+
+
+      if (realRole === "admin") {
+
+        window.location.href =
+          "admin.html";
+
+      } else {
+
+        window.location.href =
+          "student.html";
+
+      }
+
+
+    } catch (error) {
+
+      console.error(
+        "LOGIN ERROR:",
+        error
+      );
+
+
+      showMessage(
+        error.message ||
+        "حدث خطأ أثناء تسجيل الدخول.",
+        false
+      );
+
+
+    } finally {
+
+      button.disabled = false;
+
+      button.textContent =
+        "تسجيل الدخول";
+
+    }
+
+  }
+
+
+  // ==============================
+  // CREATE STUDENT ACCOUNT
+  // ==============================
+
+  async function createStudentAccount() {
+
+    clearMessage();
+
+
+    if (!supabaseClient) {
+
+      showMessage(
+        "الاتصال بقاعدة البيانات غير جاهز. أعد تحميل الصفحة.",
+        false
+      );
+
+      return;
+
+    }
+
+
+    const name =
+      document
+        .getElementById("studentName")
+        .value
+        .trim();
+
+
+    const phone =
+      document
+        .getElementById("studentPhone")
+        .value
+        .trim();
+
+
+    const guardianPhone =
+      document
+        .getElementById("guardianPhone")
+        .value
+        .trim();
+
+
+    const grade =
+      document
+        .getElementById("studentGrade")
+        .value;
+
+
+    const email =
+      document
+        .getElementById("signupEmail")
+        .value
+        .trim();
+
+
+    const password =
+      document
+        .getElementById("signupPassword")
+        .value;
+
+
+    // ==============================
+    // VALIDATION
+    // ==============================
+
+    if (
+      !name ||
+      !phone ||
+      !guardianPhone ||
+      !grade ||
+      !email ||
+      !password
+    ) {
+
+      showMessage(
+        "من فضلك أكمل جميع البيانات المطلوبة.",
+        false
+      );
+
+      return;
+
+    }
+
+
+    if (!validEgyptianPhone(phone)) {
+
+      showMessage(
+        "رقم الطالب يجب أن يبدأ بـ 010 أو 011 أو 012 أو 015 ويكون 11 رقمًا.",
+        false
+      );
+
+      return;
+
+    }
+
+
+    if (!validEgyptianPhone(guardianPhone)) {
+
+      showMessage(
+        "رقم ولي الأمر يجب أن يبدأ بـ 010 أو 011 أو 012 أو 015 ويكون 11 رقمًا.",
+        false
+      );
+
+      return;
+
+    }
+
+
+    if (password.length < 6) {
+
+      showMessage(
+        "كلمة المرور يجب أن تكون 6 أحرف على الأقل.",
+        false
+      );
+
+      return;
+
+    }
+
+
+    const button =
+      document.getElementById("signupButton");
+
+
+    button.disabled = true;
+
+    button.textContent =
+      "جارٍ إنشاء الحساب...";
+
+
+    try {
+
+      // ==============================
+      // CREATE AUTH USER
+      // ==============================
+
+      const authResult =
+        await supabaseClient.auth.signUp({
+
+          email: email,
+
+          password: password,
+
+          options: {
+
+            data: {
+
+              full_name: name,
+
+              phone: phone
+
+            }
+
+          }
+
+        });
+
+
+      console.log(
+        "SIGNUP RESULT:",
+        authResult
+      );
+
+
+      if (authResult.error) {
+
+        throw authResult.error;
+
+      }
+
+
+      const user =
+        authResult.data.user;
+
+
+      if (!user) {
+
+        throw new Error(
+          "Supabase لم يُرجع حساب المستخدم."
+        );
+
+      }
+
+
+      /*
+       * إذا كان Confirm Email ما زال مفعلاً،
+       * لن توجد Session.
+       */
+
+      if (!authResult.data.session) {
+
+        showMessage(
+          "تم إنشاء الحساب في Supabase، لكن تأكيد البريد الإلكتروني ما زال مفعلاً. ادخل إلى Authentication → Providers → Email وأوقف Confirm email.",
+          false
+        );
+
+        return;
+
+      }
+
+
+      // ==============================
+      // CREATE PROFILE
+      // ==============================
+
+      const profileResult =
+        await supabaseClient
+          .from("profiles")
+          .upsert({
+
+            id: user.id,
+
+            full_name: name,
+
+            role: "student",
+
+            phone: phone,
+
+            guardian_phone: guardianPhone,
+
+            grade: grade
+
+          });
+
+
+      if (profileResult.error) {
+
+        throw profileResult.error;
+
+      }
+
+
+      // ==============================
+      // SUCCESS
+      // ==============================
+
+      showMessage(
+        "تم إنشاء حساب الطالب بنجاح 🎉 سيتم تحويلك إلى صفحة الطالب...",
+        true
+      );
+
+
+      setTimeout(
+        function () {
+
+          window.location.href =
+            "student.html";
+
+        },
+        1200
+      );
+
+
+    } catch (error) {
+
+      console.error(
+        "SIGNUP ERROR:",
+        error
+      );
+
+
+      let message =
+        error.message ||
+        "حدث خطأ أثناء إنشاء الحساب.";
+
+
+      /*
+       * رسائل أوضح لبعض أخطاء Supabase
+       */
+
+      if (
+        message
+          .toLowerCase()
+          .includes("already registered")
+      ) {
+
+        message =
+          "هذا البريد الإلكتروني مسجل بالفعل. استخدم بريدًا آخر أو سجّل الدخول.";
+
+      }
+
+
+      showMessage(
+        message,
+        false
+      );
+
+
+    } finally {
+
+      button.disabled = false;
+
+      button.textContent =
+        "إنشاء حساب الطالب";
+
+    }
+
+  }
+
+
+  // ==============================
+  // START
+  // ==============================
+
+  document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+      initializeSupabase();
+
+    }
+  );
+
+</script>
+
+</body>
+</html>
